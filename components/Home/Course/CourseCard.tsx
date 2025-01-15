@@ -12,7 +12,7 @@ type Props = {
     image: string;
     title: string;
     price: number;
-    author: string;
+    // author: string;
     reviewNumber: number;
     lessons: number;
     students: number;
@@ -45,7 +45,7 @@ const CourseCard = ({ course }: Props) => {
             <span className="text-lg text-black text-opacity-70 font-bold">
               {course.category}
             </span>
-            <span className="text-base text-gray-600">{course.author}</span>
+            {/* <span className="text-base text-gray-600">{course.author}</span> */}
           </div>
           {/* title */}
           <h1 className="text-xl text-black font-bold mt-2">{course.title}</h1>

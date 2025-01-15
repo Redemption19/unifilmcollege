@@ -17,12 +17,10 @@ const About = () => {
             </h1>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl mt-8 font-bold md:leading-[3rem] lg:leading-[3.5rem] xl:leading-[3.9rem] text-gray-800">
-            Online learning wherever and whenever.
+          Global Exposure and Career Opportunities
           </h1>
           <p className="mt-4 text-gray-600">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate
-            non repellendus aliquam, dicta blanditiis voluptatum autem error
-            culpa inventore.{" "}
+            Unifilm College opens doors to global opportunities, providing students with exposure to international networks and industry leaders. Through strategic partnerships, including our collaboration with the Youngtrepreneurs UK Film Academy, we offer internships, mentorship, and career advancement opportunities.{" "}
           </p>
           <button className="flex items-center space-x-2 px-8 py-3 mt-8 hover:bg-gray-700 transition-all duration-200 rounded-3xl bg-black text-white">
             <span>Learn More</span>
@@ -41,11 +39,10 @@ const About = () => {
             </h1>
             <div className="-mt-10">
               <h1 className="text-xl md:text-2xl text-opacity-70 mb-3 text-black font-bold">
-                Flexible schedule
+              Designed for Your Creative Journey
               </h1>
               <p className="w-[90%] lg:w-[70%] text-base text-black text-opacity-60">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit Lorem
-                ipsum dolor sit amet. Temporibus, similique?
+              Whether you're studying film, media, design, or technology, we provide the freedom and support you need to pursue your passion and excel in your chosen field.
               </p>
             </div>
           </div>
@@ -58,8 +55,7 @@ const About = () => {
                 Pocket Friendly
               </h1>
               <p className="w-[90%] lg:w-[70%] text-base text-black text-opacity-60">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit Lorem
-                ipsum dolor sit amet. Temporibus, similique?
+              Our affordable programs are designed to provide you with top-tier training without breaking the bank.
               </p>
             </div>
           </div>

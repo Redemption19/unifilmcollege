@@ -11,7 +11,7 @@ const HeroImage = () => {
         data-aos-delay="1050"
         className="hidden lg:block overflow-hidden"
       >
-        <Image src="/images/hero.png" width={800} height={600} alt="Hero" />
+        <Image src="/images/hero-img.png" width={800} height={600} alt="Hero" />
       </div>
     </Tilt>
   );
