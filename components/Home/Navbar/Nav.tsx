@@ -32,12 +32,12 @@ const Nav = ({ openNav }: Props) => {
   return (
     <div
       className={`fixed ${
-        navBg ? "bg-indigo-800" : "fixed"
+        navBg ? "bg-indigo-950" : "fixed"
       } w-full transition-all duration-200 h-[12vh] z-[1000]`}
     >
       <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
         {/* Logo */}
-        <Image src="/images/logo.png" alt="Logo" width={120} height={120} />
+        <Image src="/images/unifilm-logo.PNG" alt="Logo" width={70} height={70} />
         {/* NavLinks */}
         <div className="hidden lg:flex items-center space-x-10">
           {navLinks.map((link) => {
@@ -50,8 +50,8 @@ const Nav = ({ openNav }: Props) => {
         </div>
         {/* Buttons */}
         <div className="flex items-center space-x-4">
-          <button className="md:px-10 md:py-2 px-8 py-1.5 text-white font-semibold text-base bg-pink-700 hover:bg-pink-900 transition-all duration-200 rounded-lg">
-            Signup Now
+          <button className="md:px-10 md:py-2 px-8 py-1. text-white font-semibold text-base bg-yellow-700 hover:bg-yellow-900 transition-all duration-200 rounded-lg">
+            Apply Now
           </button>
           {/* Burger menu */}
           <HiBars3BottomRight
