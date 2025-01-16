@@ -24,7 +24,7 @@ export default function AboutPage() {
             Discovering the Art of Film and Creativity
           </h1>
           <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-300 max-w-xl">
-            Founded in November 2023, Unifilm College is Ghana's premier practical training institution for aspiring creatives.
+            Founded in November 2023, Unifilm College is Ghana&apos;s premier practical training institution for aspiring creatives.
           </p>
         </div>
       </div>

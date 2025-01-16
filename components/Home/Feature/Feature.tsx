@@ -35,7 +35,7 @@ const Feature = () => {
               Master the skills that matter to you
             </h1>
             <p className="text-sm md:text-base text-black text-opacity-70 mt-4">
-            Master the skills that matter to you with our hands-on training sessions designed to empower and inspire. Whether you're starting fresh or looking to enhance your expertise, we provide tailored programs to meet your goals.
+            Master the skills that matter to you with our hands-on training sessions designed to empower and inspire. Whether you&apos;re starting fresh or looking to enhance your expertise, we provide tailored programs to meet your goals.
             </p>
           </div>
           <div className="mt-8 mb-6">

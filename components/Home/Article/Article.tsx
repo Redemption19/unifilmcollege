@@ -101,7 +101,6 @@ const Article = () => {
                   </p>
                 </div>
               </motion.div>
-              
               {/* Arrows (only show between items, not after the last one) */}
               {i < admissionSteps.length - 1 && (
                 <>
@@ -115,7 +114,6 @@ const Article = () => {
                       <ArrowRight className="w-8 h-8 text-[#a36105]" />
                     </motion.div>
                   </div>
-                  
                   {/* Mobile/Tablet Arrow */}
                   <div className="lg:hidden flex justify-center mt-4">
                     <motion.div
@@ -188,7 +186,6 @@ const Article = () => {
                     <Plus className="w-5 h-5 text-[#a36105] flex-shrink-0" />
                   )}
                 </button>
-                
                 {openFaq === index && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
@@ -214,7 +211,7 @@ const Article = () => {
             className="text-center mt-12"
           >
             <p className="text-gray-600 mb-4">
-              Still have questions? We're here to help!
+              Still have questions? We&apos;re here to help!
             </p>
             <Link href="/contact">
               <Button 

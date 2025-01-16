@@ -45,7 +45,7 @@ const About = () => {
               Designed for Your Creative Journey
               </h1>
               <p className="w-[90%] lg:w-[70%] text-base text-black text-opacity-60">
-              Whether you're studying film, media, design, or technology, we provide the freedom and support you need to pursue your passion and excel in your chosen field.
+              Whether you&apos;re studying film, media, design, or technology, we provide the freedom and support you need to pursue your passion and excel in your chosen field.
               </p>
             </div>
           </div>
