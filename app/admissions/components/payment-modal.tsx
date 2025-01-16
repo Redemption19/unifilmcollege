@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { usePaystackPayment } from "react-paystack";
+
+import { useEffect, useState } from 'react';
+import { PaystackButton } from 'react-paystack';
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
@@ -14,6 +15,11 @@ export function PaymentModal({ isOpen, onClose, onSuccess }: PaymentModalProps) 
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const config = {
     reference: new Date().getTime().toString(),
@@ -45,15 +51,15 @@ export function PaymentModal({ isOpen, onClose, onSuccess }: PaymentModalProps) 
     alert("Payment failed or was cancelled. Please try again.");
   };
 
-  const initializePayment = usePaystackPayment(config);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // @ts-ignore - Paystack types are not perfect
     initializePayment(onSuccess_callback, onClose_callback);
   };
 
-  if (!isOpen) return null;
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
