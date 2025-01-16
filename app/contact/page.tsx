@@ -42,7 +42,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div className="bg-card rounded-lg p-8 shadow-lg">
               <MapPin className="h-8 w-8 text-primary mb-4" />
               <h3 className="text-lg font-semibold mb-2">Location</h3>
@@ -74,10 +74,10 @@ export default function ContactPage() {
       </div>
 
       {/* Contact Form */}
-      <div className="py-24 sm:py-32 bg-muted">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="py-16 sm:py-24 bg-muted">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl">
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">

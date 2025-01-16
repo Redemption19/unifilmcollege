@@ -18,6 +18,7 @@ const MobileNav = ({ closeNav, showNav }: Props) => {
     <div>
       {/* Overlay */}
       <div
+        onClick={closeNav}
         className={`fixed ${navOpen} top-0 transform transition-all duration-500 z-[10000] left-0 right-0 bottom-0 bg-black opacity-70 w-full h-[100vh]`}
       />
       <div
@@ -27,7 +28,7 @@ const MobileNav = ({ closeNav, showNav }: Props) => {
         {navLinks.map((link) => {
           const isActive = pathname === link.url;
           return (
-            <Link key={link.id} href={link.url}>
+            <Link key={link.id} href={link.url} onClick={closeNav}>
               <p className={`nav__link text-[20px] ml-12 border-b-[1.5px] pb-2 border-white sm:text-[30px] 
                 ${isActive ? 'text-yellow-400' : ''}`}>
                 {link.label}

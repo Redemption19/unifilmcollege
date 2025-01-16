@@ -77,18 +77,18 @@
 
 @layer components {
   .nav__link {
-    @apply relative text-xl w-fit block after:block after:content-[''] font-semibold after:absolute after:h-[3px] after:bg-yellow-400 text-white after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-right
+    @apply relative text-base sm:text-xl w-fit block after:block after:content-[''] font-semibold after:absolute after:h-[3px] after:bg-yellow-400 text-white after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-right
   }
 
   .button__cls {
-    @apply md:px-12 md:py-2.5 px-6 py-1.5 text-white font-semibold text-sm md:text-lg transition-all duration-200 rounded-lg
+    @apply px-4 sm:px-6 md:px-12 py-1.5 md:py-2.5 text-white font-semibold text-sm md:text-lg transition-all duration-200 rounded-lg
   }
 
   .footer__heading {
-    @apply text-lg text-white font-bold mb-4
+    @apply text-base sm:text-lg text-white font-bold mb-3 sm:mb-4
   }
 
   .footer__link {
-    @apply text-sm text-white hover:text-green-700 cursor-pointer text-opacity-60 mb-3 w-fit
+    @apply text-xs sm:text-sm text-white hover:text-green-700 cursor-pointer text-opacity-60 mb-2 sm:mb-3 w-fit
   }
 }

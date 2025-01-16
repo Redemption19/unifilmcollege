@@ -19,22 +19,22 @@ export default function AboutPage() {
           />
           <div className="absolute inset-0 bg-primary/70 mix-blend-multiply" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-24 lg:py-32 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-24 lg:py-32 lg:px-8">
+          <h1 className="text-2xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white">
             Discovering the Art of Film and Creativity
           </h1>
-          <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-300 max-w-xl">
+          <p className="mt-4 text-sm sm:text-base lg:text-lg leading-7 text-gray-300 max-w-xl">
             Founded in November 2023, Unifilm College is Ghana&apos;s premier practical training institution for aspiring creatives.
           </p>
         </div>
       </div>
 
       {/* About Content */}
-      <div className="py-16 sm:py-24 lg:py-32">
+      <div className="py-12 sm:py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 lg:gap-12 lg:grid-cols-2 items-center">
             {/* Image Container */}
-            <div className="relative h-[300px] sm:h-[400px] w-full">
+            <div className="relative h-[250px] sm:h-[300px] lg:h-[400px] w-full">
               <Image
                 src="/images/about.jpg"
                 alt="About Unifilm College"
@@ -43,11 +43,11 @@ export default function AboutPage() {
               />
             </div>
             {/* Text Content */}
-            <div className="space-y-6">
-              <p className="text-base sm:text-lg leading-7 sm:leading-8 text-muted-foreground">
+            <div className="space-y-4 sm:space-y-6">
+              <p className="text-sm sm:text-base lg:text-lg leading-7 text-muted-foreground">
                 Recognized by the Ghana Education Service and NASIA, we offer industry-relevant programs that blend hands-on training with academic rigor. Our strategic partnership with the Youngtrepreneurs UK Film Academy provides students with unique opportunities for internships, mentorship, and career advancement through global exposure.
               </p>
-              <p className="text-base sm:text-lg leading-7 sm:leading-8 text-muted-foreground">
+              <p className="text-sm sm:text-base lg:text-lg leading-7 text-muted-foreground">
                 Unifilm College is committed to offering students the tools they need to thrive in the creative industry, helping them build solid networks, gain valuable experience, and unlock career opportunities.
               </p>
               <Button asChild>

@@ -212,7 +212,7 @@ export default function GalleryPage() {
         {/* Gallery Grid */}
         <div className="py-24 sm:py-32 bg-muted">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {galleryImages.map((image, index) => (
                 <div
                   key={index}
@@ -227,11 +227,12 @@ export default function GalleryPage() {
                       alt={image.alt}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-primary/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <div className="text-center">
-                        <p className="text-white font-semibold">{image.category}</p>
-                        <p className="text-gray-200 text-sm mt-2">{image.alt}</p>
+                      <div className="text-center p-4">
+                        <p className="text-white font-semibold text-sm sm:text-base">{image.category}</p>
+                        <p className="text-gray-200 text-xs sm:text-sm mt-2">{image.alt}</p>
                       </div>
                     </div>
                   </div>
