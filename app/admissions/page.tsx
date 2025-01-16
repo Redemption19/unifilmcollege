@@ -98,6 +98,21 @@ export default function AdmissionsPage() {
 
       <PaymentMethods />
 
+      {/* Hostel Information */}
+      <div className="py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Hostel Facilities</h2>
+            <p className="mt-6 text-lg leading-8 text-muted-foreground">
+              Comfortable accommodation is available for students at 350 GHS per month.
+            </p>
+            <div className="mt-10">
+              <Button size="lg">Contact for Availability</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Payment Modal */}
       {isPaymentModalOpen && (
         <PaymentModal
