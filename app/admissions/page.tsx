@@ -52,8 +52,8 @@ export default function AdmissionsPage() {
           />
           <div className="absolute inset-0 bg-primary/70 mix-blend-multiply" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-24 lg:py-32 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 sm:py-24 lg:py-32 lg:px-8 flex flex-col items-center text-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white mt-1">
             Begin Your Creative Journey
           </h1>
           <p className="mt-4 sm:mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-300 max-w-xl">

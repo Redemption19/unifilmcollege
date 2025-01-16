@@ -1,4 +1,6 @@
 import { CreditCard, Smartphone, Building2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const paymentMethods = [
   {
@@ -58,6 +60,25 @@ export function PaymentMethods() {
               <p className="text-sm text-muted-foreground">{method.instructions}</p>
             </div>
           ))}
+        </div>
+
+        {/* Payment Buttons */}
+        <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button 
+            size="lg" 
+            onClick={() => window.location.href = "https://paystack.com/pay/unifilmcollege"}
+            className="w-full sm:w-auto"
+          >
+            Buy Form Online
+          </Button>
+          <Button 
+            size="lg" 
+            variant="outline"
+            asChild
+            className="w-full sm:w-auto"
+          >
+            <Link href="/contact">Contact Us</Link>
+          </Button>
         </div>
       </div>
     </div>
