@@ -1,20 +1,47 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { courseData } from "@/lib/course-data";
 import Image from "next/image";
+import { Course } from "@/types";
+import { Loader2 } from "lucide-react";
 
 export default function CoursesPage() {
+  const [courses, setcourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
       easing: "ease",
       once: true,
     });
+    fetchCourses();
   }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const res = await fetch('/api/courses');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setcourses(data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div data-aos="fade-up">
@@ -34,9 +61,9 @@ export default function CoursesPage() {
       <div className="py-24 sm:py-32" data-aos="fade-up" data-aos-delay="200">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            {courseData.map((course) => (
+            {courses.map((course) => (
               <div
-                key={course.slug}
+                key={course._id}
                 className="bg-card rounded-2xl overflow-hidden shadow-lg flex flex-col"
               >
                 <div className="relative h-[240px] w-full">
