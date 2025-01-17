@@ -42,31 +42,72 @@ export default function GalleryPage() {
     }
   };
 
-  const handleEdit = async (id: string, formData: FormData) => {
-    const editPromise = new Promise(async (resolve, reject) => {
+  const handleAddImage = async (formData: FormData) => {
+    const addPromise = new Promise(async (resolve, reject) => {
       try {
-        const res = await fetch(`/api/admin/gallery/${id}`, {
-          method: "PATCH",
+        const res = await fetch("/api/admin/gallery", {
+          method: "POST",
           body: formData,
         });
 
         if (!res.ok) {
           const error = await res.json();
-          throw new Error(error.error || "Failed to update image");
+          throw new Error(error.error || "Failed to add image");
         }
 
         await fetchGallery();
-        resolve("Image updated successfully");
+        resolve("Image added successfully");
+      } catch (error) {
+        console.error("Error adding image:", error);
+        reject(error);
+      }
+    });
+
+    toast.promise(addPromise, {
+      loading: 'Adding image...',
+      success: 'Image added successfully',
+      error: (err) => `Failed to add image: ${err.message}`
+    });
+  };
+
+  const handleEdit = async (id: string, formData: FormData) => {
+    const editPromise = new Promise(async (resolve, reject) => {
+      try {
+        console.log('Sending update request for image:', id);
+        
+        const res = await fetch(`/api/admin/gallery/${id}`, {
+          method: "PATCH",
+          body: formData,
+        });
+
+        const text = await res.text();
+        console.log('Raw response:', text);
+
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          console.error('Failed to parse response:', text);
+          throw new Error('Server returned invalid JSON');
+        }
+
+        if (!res.ok) {
+          throw new Error(data.error || "Failed to update image");
+        }
+
+        console.log('Update successful:', data);
+        await fetchGallery();
+        resolve(data.message || "Image updated successfully");
       } catch (error) {
         console.error("Error updating image:", error);
-        reject(error);
+        reject(error instanceof Error ? error.message : "Unknown error occurred");
       }
     });
 
     toast.promise(editPromise, {
       loading: 'Updating image...',
-      success: 'Image updated successfully',
-      error: 'Failed to update image'
+      success: (message) => message as string,
+      error: (err) => `Failed to update image: ${err}`
     });
   };
 
@@ -111,22 +152,9 @@ export default function GalleryPage() {
     setDeleteId(null);
   };
 
-  const handleAddImage = async (formData: FormData) => {
-    try {
-      const res = await fetch("/api/admin/gallery", {
-        method: "POST",
-        body: formData,
-      });
-      if (!res.ok) throw new Error("Failed to add image");
-      fetchGallery();
-    } catch (error) {
-      console.error("Error adding image:", error);
-    }
-  };
-
   if (loading) {
     return (
-      <div className="flex h-[60vh] items-center justify-center">
+      <div className="flex justify-center items-center h-[200px]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );

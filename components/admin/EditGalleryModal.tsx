@@ -29,9 +29,19 @@ export default function EditGalleryModal({ image, onSubmit }: EditGalleryModalPr
     setLoading(true);
 
     try {
-      const formData = new FormData(e.currentTarget);
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      
+      // Log formData contents for debugging
+      console.log('Submitting form data:', {
+        file: formData.get('file'),
+        alt: formData.get('alt'),
+        category: formData.get('category')
+      });
+
       await onSubmit(image._id, formData);
       setOpen(false);
+      toast.success('Image updated successfully');
     } catch (error) {
       console.error("Error updating image:", error);
       toast.error("Failed to update image");
@@ -52,31 +62,39 @@ export default function EditGalleryModal({ image, onSubmit }: EditGalleryModalPr
           <DialogTitle>Edit Image</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+          <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="file">Image</Label>
-            <Input id="file" name="file" type="file" accept="image/*" />
+            <Input 
+              id="file" 
+              name="file" 
+              type="file" 
+              accept="image/*"
+            />
             <p className="text-sm text-muted-foreground">
               Leave empty to keep the current image
             </p>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="category">Category</Label>
-            <Input 
-              id="category" 
-              name="category" 
-              defaultValue={image.category}
-              required 
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="alt">Description</Label>
-            <Input 
-              id="alt" 
-              name="alt" 
+
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="alt">Title</Label>
+            <Input
+              id="alt"
+              name="alt"
               defaultValue={image.alt}
-              required 
+              required
             />
           </div>
+
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="category">Category</Label>
+            <Input
+              id="category"
+              name="category"
+              defaultValue={image.category}
+              required
+            />
+          </div>
+
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (
               <>

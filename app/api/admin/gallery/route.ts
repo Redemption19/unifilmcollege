@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
+import sharp from "sharp";
 
 export async function GET() {
   try {
@@ -30,22 +31,22 @@ export async function POST(req: Request) {
       );
     }
 
-    // Log the upload attempt
-    console.log("Attempting to upload:", {
-      fileName: file.name,
-      fileSize: file.size,
-      fileType: file.type,
-      alt,
-      category
-    });
+    // Optimize image before upload
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const optimizedBuffer = await sharp(buffer)
+      .resize(1200, 900, { // Set maximum dimensions
+        fit: 'inside',
+        withoutEnlargement: true
+      })
+      .jpeg({ quality: 80 }) // Compress JPEG
+      .toBuffer();
 
-    // Upload to Vercel Blob
-    const blob = await put(file.name, file, {
+    // Upload optimized image
+    const blob = await put(file.name, optimizedBuffer, {
       access: 'public',
-      addRandomSuffix: true
+      addRandomSuffix: true,
+      contentType: 'image/jpeg'
     });
-
-    console.log("File uploaded to Vercel Blob:", blob.url);
 
     // Create database entry
     const image = await GalleryImage.create({
@@ -54,13 +55,11 @@ export async function POST(req: Request) {
       category
     });
 
-    console.log("Image saved to database:", image);
-
     return NextResponse.json(image);
   } catch (error) {
     console.error("[GALLERY_POST]", error);
     return NextResponse.json(
-      { error: "Failed to upload image: " + (error as Error).message },
+      { error: "Failed to upload image" },
       { status: 500 }
     );
   }
