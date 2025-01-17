@@ -53,7 +53,7 @@ export default function GalleryModal({ onSubmit }: { onSubmit: (data: FormData) 
             <Input name="category" required />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Alt Text</label>
+            <label className="text-sm font-medium">Description</label>
             <Input name="alt" required />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>

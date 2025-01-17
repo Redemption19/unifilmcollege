@@ -10,8 +10,11 @@ export async function PATCH(
 ) {
   try {
     await connectDB();
+
     const formData = await req.formData();
+    console.log("Received form data:", Object.fromEntries(formData.entries()));
     
+    // Get all form fields
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const duration = formData.get("duration") as string;
@@ -19,25 +22,24 @@ export async function PATCH(
     const image = formData.get("image") as File | null;
     const careerPath = formData.get("careerPath") as string;
     
-    // Handle modules array
-    const modules = formData.getAll("modules").map(m => m.toString()).filter(m => m.trim() !== '');
-    
-    // Handle learning outcomes array
-    const learningOutcomes = formData.getAll("learningOutcomes").map(o => o.toString()).filter(o => o.trim() !== '');
+    // Handle arrays
+    const modules = formData.getAll("modules").map(m => m.toString());
+    const learningOutcomes = formData.getAll("learningOutcomes").map(o => o.toString());
 
+    // Prepare update object
     const updateData: any = {
       title,
       description,
       duration,
       fees,
-      slug: slugify(title, { lower: true }),
       modules,
       learningOutcomes,
       careerPath,
+      slug: slugify(title, { lower: true })
     };
 
-    // Only update image if a new one is provided
-    if (image && image.size > 0) {
+    // Only include image if a new one is provided
+    if (image instanceof File && image.size > 0) {
       const blob = await put(image.name, image, {
         access: 'public',
         addRandomSuffix: true
@@ -45,13 +47,16 @@ export async function PATCH(
       updateData.image = blob.url;
     }
 
+    console.log("Update data:", updateData);
+
     const course = await Course.findByIdAndUpdate(
       params.id,
       updateData,
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!course) {
+      console.log("Course not found with ID:", params.id);
       return NextResponse.json(
         { error: "Course not found" },
         { status: 404 }
@@ -62,7 +67,7 @@ export async function PATCH(
   } catch (error) {
     console.error("[COURSE_UPDATE]", error);
     return NextResponse.json(
-      { error: "Failed to update course" },
+      { error: "Failed to update course: " + (error as Error).message },
       { status: 500 }
     );
   }

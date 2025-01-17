@@ -28,7 +28,7 @@ const HeroContent = () => {
           data-aos="zoom-in"
           data-aos-delay="300"
         >
-          <button className="button__cls bg-[#2167e8] hover:bg-[#1a51b8] transition-all duration-300 flex items-center group">
+          <button className="button__cls bg-[#2167e8] hover:bg-[#1a51b8] transition-all duration-300 flex items-center justify-center group">
             Apply Now
             <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
           </button>
@@ -38,7 +38,7 @@ const HeroContent = () => {
           data-aos="zoom-in"
           data-aos-delay="450"
         >
-          <button className="button__cls bg-transparent border-2 border-[#a36105] text-[#a36105] hover:bg-[#a36105] hover:text-white transition-all duration-300 flex items-center group">
+          <button className="button__cls bg-transparent border-2 border-[#a36105] text-[#a36105] hover:bg-[#a36105] hover:text-white transition-all duration-300 flex items-center justify-center group">
             View Courses
             <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
           </button>
