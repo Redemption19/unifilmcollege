@@ -13,14 +13,13 @@ declare module 'jspdf' {
 }
 
 interface Payment {
-  createdAt: string;
+  reference: string;
   fullName: string;
   email: string;
   phone: string;
   amount: number;
   status: string;
-  reference: string;
-  formSent: boolean;
+  createdAt: string;
 }
 
 interface ExportButtonsProps {
@@ -31,20 +30,21 @@ interface ExportButtonsProps {
 export function ExportButtons({ data, filename }: ExportButtonsProps) {
   const [exporting, setExporting] = useState<'excel' | 'pdf' | null>(null);
 
+  const formatData = (item: Payment) => ({
+    Reference: item.reference,
+    Name: item.fullName,
+    Email: item.email,
+    Phone: item.phone,
+    Amount: `GHS ${item.amount / 100}`,
+    Status: item.status,
+    Date: new Date(item.createdAt).toLocaleDateString()
+  });
+
   const exportToExcel = async () => {
     try {
       setExporting('excel');
-      const ws = XLSX.utils.json_to_sheet(data.map(item => ({
-        Date: new Date(item.createdAt).toLocaleDateString(),
-        Name: item.fullName,
-        Email: item.email,
-        Phone: item.phone,
-        Amount: `GHS ${item.amount / 100}`,
-        Status: item.status,
-        Reference: item.reference,
-        'Form Sent': item.formSent ? 'Yes' : 'No'
-      })));
-
+      const formattedData = data.map(formatData);
+      const ws = XLSX.utils.json_to_sheet(formattedData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Payments');
       XLSX.writeFile(wb, `${filename}.xlsx`);
@@ -60,15 +60,15 @@ export function ExportButtons({ data, filename }: ExportButtonsProps) {
       setExporting('pdf');
       const doc = new jsPDF();
 
-      const tableColumn = ["Date", "Name", "Email", "Phone", "Amount", "Status", "Reference"];
+      const tableColumn = ["Reference", "Name", "Email", "Phone", "Amount", "Status", "Date"];
       const tableRows = data.map(item => [
-        new Date(item.createdAt).toLocaleDateString(),
+        item.reference,
         item.fullName,
         item.email,
         item.phone,
         `GHS ${item.amount / 100}`,
         item.status,
-        item.reference
+        new Date(item.createdAt).toLocaleDateString()
       ]);
 
       doc.autoTable({
@@ -77,6 +77,15 @@ export function ExportButtons({ data, filename }: ExportButtonsProps) {
         startY: 20,
         styles: { fontSize: 8 },
         headStyles: { fillColor: [41, 128, 185] },
+        columnStyles: {
+          0: { cellWidth: 30 }, // Reference
+          1: { cellWidth: 30 }, // Name
+          2: { cellWidth: 40 }, // Email
+          3: { cellWidth: 25 }, // Phone
+          4: { cellWidth: 20 }, // Amount
+          5: { cellWidth: 20 }, // Status
+          6: { cellWidth: 25 }  // Date
+        }
       });
 
       doc.save(`${filename}.pdf`);
