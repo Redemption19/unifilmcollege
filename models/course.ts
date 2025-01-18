@@ -37,6 +37,11 @@ const courseSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
+  // Define all indexes in one place
+  indexes: [
+    { slug: 1 },
+    { createdAt: -1 }
+  ]
 });
 
 // Generate slug before saving
@@ -45,10 +50,5 @@ courseSchema.pre('save', function(next) {
   next();
 });
 
-// Add indexes for frequently queried fields
-courseSchema.index({ slug: 1 });
-courseSchema.index({ createdAt: -1 });
-
 const Course = mongoose.models.Course || mongoose.model("Course", courseSchema);
-
 export default Course;

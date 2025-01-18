@@ -12,15 +12,14 @@ const paymentSchema = new mongoose.Schema({
   },
   reference: { type: String, required: true, unique: true },
   formSent: { type: Boolean, default: false },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
 }, {
-  timestamps: true
+  timestamps: true,
+  // Define all indexes in schema options
+  indexes: [
+    { status: 1 },
+    { createdAt: -1 }
+  ]
 });
-
-// Only define indexes once
-paymentSchema.index({ status: 1 });
-paymentSchema.index({ createdAt: -1 });
 
 const Payment = mongoose.models.Payment || mongoose.model("Payment", paymentSchema);
 

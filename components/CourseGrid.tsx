@@ -8,6 +8,10 @@ interface CourseGridProps {
 }
 
 export default function CourseGrid({ courses }: CourseGridProps) {
+  if (!courses || courses.length === 0) {
+    return null;
+  }
+
   return (
     <div className="py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -24,7 +28,7 @@ export default function CourseGrid({ courses }: CourseGridProps) {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover"
-                  loading="lazy"
+                  priority
                 />
               </div>
               

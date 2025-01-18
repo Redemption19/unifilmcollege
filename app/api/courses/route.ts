@@ -9,6 +9,8 @@ export async function GET() {
     await connectDB();
     const courses = await Course.find().sort({ createdAt: -1 });
     
+    console.log('Fetched courses:', courses.length);
+    
     return NextResponse.json(courses, {
       headers: {
         'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
