@@ -1,4 +1,7 @@
-import { useEffect, useState, Suspense } from 'react';
+// Add "use client" at the top of the file
+'use client';
+
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,7 +9,7 @@ import Link from 'next/link';
 import { CheckCircle2, Download } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 
-function SuccessPage() {
+export default function SuccessPage() {
   const searchParams = useSearchParams();
   const reference = searchParams.get('reference');
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
@@ -22,11 +25,6 @@ function SuccessPage() {
         }
       } catch (error) {
         console.error('Error fetching payment details:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load payment details. Please try again later.",
-          variant: "destructive",
-        });
       }
     };
 
@@ -48,23 +46,19 @@ function SuccessPage() {
       if (!response.ok) throw new Error('Download failed');
 
       const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'unifilm-admission-form.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
 
-      // Only use window in the client-side
-      if (typeof window !== "undefined") {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'unifilm-admission-form.pdf';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-
-        toast({
-          title: "Download Started",
-          description: "Your admission form is being downloaded.",
-        });
-      }
+      toast({
+        title: "Download Started",
+        description: "Your admission form is being downloaded.",
+      });
     } catch (error) {
       toast({
         title: "Download Failed",
@@ -116,13 +110,5 @@ function SuccessPage() {
         </Card>
       </div>
     </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <SuccessPage />
-    </Suspense>
   );
 }
