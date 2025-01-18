@@ -1,5 +1,11 @@
 {
   "version": 2,
   "buildCommand": "next build",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "functions": {
+    "app/api/**/*": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
 } 

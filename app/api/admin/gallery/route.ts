@@ -3,9 +3,6 @@ import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 
-// Remove all config exports and use metadata
-export const dynamic = 'force-dynamic';
-
 export async function GET() {
   try {
     await connectDB();
@@ -36,8 +33,7 @@ export async function POST(req: Request) {
 
     await connectDB();
 
-    // Handle file size limit for Vercel
-    if (file.size > 4.5 * 1024 * 1024) { // 4.5MB limit
+    if (file.size > 4.5 * 1024 * 1024) {
       return NextResponse.json(
         { error: "File size must be less than 4.5MB" },
         { status: 400 }
