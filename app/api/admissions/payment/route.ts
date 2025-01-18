@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import Payment from '@/models/Payment';
+import Payment from '@/models/payment';
 
 export async function POST(req: Request) {
   try {

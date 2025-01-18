@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { resend, emailConfig } from '@/lib/resend';
-import Payment from '@/models/Payment';
+import Payment from '@/models/payment';
 import connectDB from '@/lib/mongodb';
 import path from 'path';
 import fs from 'fs/promises';

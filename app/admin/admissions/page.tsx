@@ -17,18 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Search, Trash2 } from "lucide-react";
 import { DeleteAlert } from "@/components/DeleteAlert";
 import toast from 'react-hot-toast';
-
-interface Payment {
-  _id: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  amount: number;
-  status: 'pending' | 'successful' | 'failed';
-  reference: string;
-  formSent: boolean;
-  createdAt: string;
-}
+import type { Payment } from '@/types/payment';
 
 const getStatusColor = (status: string) => {
   switch (status) {

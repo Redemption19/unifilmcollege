@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import Payment from "@/models/Payment";
+import Payment from "@/models/payment";
 import connectDB from "@/lib/mongodb";
 import { Resend } from 'resend';
 
