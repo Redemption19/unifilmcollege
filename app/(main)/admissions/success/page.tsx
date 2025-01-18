@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +6,7 @@ import Link from 'next/link';
 import { CheckCircle2, Download } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 
-export default function SuccessPage() {
+function SuccessPage() {
   const searchParams = useSearchParams();
   const reference = searchParams.get('reference');
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
@@ -24,6 +22,11 @@ export default function SuccessPage() {
         }
       } catch (error) {
         console.error('Error fetching payment details:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load payment details. Please try again later.",
+          variant: "destructive",
+        });
       }
     };
 
@@ -45,19 +48,23 @@ export default function SuccessPage() {
       if (!response.ok) throw new Error('Download failed');
 
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'unifilm-admission-form.pdf';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
 
-      toast({
-        title: "Download Started",
-        description: "Your admission form is being downloaded.",
-      });
+      // Only use window in the client-side
+      if (typeof window !== "undefined") {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'unifilm-admission-form.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        toast({
+          title: "Download Started",
+          description: "Your admission form is being downloaded.",
+        });
+      }
     } catch (error) {
       toast({
         title: "Download Failed",
@@ -74,26 +81,18 @@ export default function SuccessPage() {
           <div className="flex justify-center">
             <CheckCircle2 className="h-16 w-16 text-green-500" />
           </div>
-          
           <h1 className="text-2xl font-bold">Payment Successful!</h1>
-          
           <div className="space-y-2 text-muted-foreground">
             <p>Thank you for purchasing the admission form.</p>
             <p>Your reference number: <span className="font-mono">{reference}</span></p>
             <p>Please check your email for your admission form and further instructions.</p>
           </div>
-
           <div className="flex justify-center pt-4">
-            <Button 
-              onClick={handleDownload}
-              className="w-full sm:w-auto"
-              size="lg"
-            >
+            <Button onClick={handleDownload} className="w-full sm:w-auto" size="lg">
               <Download className="mr-2 h-4 w-4" />
               Download Form Now
             </Button>
           </div>
-
           <div className="space-y-2 pt-4">
             <p className="font-semibold">Next Steps:</p>
             <ul className="text-sm space-y-1">
@@ -102,7 +101,6 @@ export default function SuccessPage() {
               <li>3. Submit your completed application</li>
             </ul>
           </div>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
             <Button asChild variant="outline">
               <Link href="/admissions">
@@ -119,4 +117,12 @@ export default function SuccessPage() {
       </div>
     </div>
   );
-} 
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SuccessPage />
+    </Suspense>
+  );
+}
