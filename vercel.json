@@ -1,12 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "regions": ["iad1"],
-  "env": {
-    "MONGODB_URI": "REQUIRED",
-    "NEXT_PUBLIC_APP_URL": "REQUIRED",
-    "BLOB_READ_WRITE_TOKEN": "REQUIRED"
-  }
+  "buildCommand": "next build",
+  "framework": "nextjs"
 } 

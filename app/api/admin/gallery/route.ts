@@ -3,9 +3,9 @@ import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 
-// Configure for Vercel serverless functions
-export const runtime = 'edge';
-export const maxDuration = 60;
+// Correct route segment config for Next.js 14
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   try {
