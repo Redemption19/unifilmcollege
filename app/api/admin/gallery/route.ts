@@ -3,9 +3,9 @@ import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 
-// New way to configure the API route
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+// Configure for Vercel serverless functions
+export const runtime = 'edge';
+export const maxDuration = 60;
 
 export async function GET() {
   try {
@@ -37,9 +37,18 @@ export async function POST(req: Request) {
 
     await connectDB();
 
+    // Handle file size limit for Vercel
+    if (file.size > 4.5 * 1024 * 1024) { // 4.5MB limit
+      return NextResponse.json(
+        { error: "File size must be less than 4.5MB" },
+        { status: 400 }
+      );
+    }
+
     const blob = await put(file.name, file, {
       access: 'public',
-      addRandomSuffix: true
+      addRandomSuffix: true,
+      contentType: file.type
     });
 
     const image = await GalleryImage.create({

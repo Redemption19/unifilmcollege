@@ -1,17 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'images.unsplash.com',
-      'plus.unsplash.com',
-      'res.cloudinary.com',
-      'qhaxwz0jp8ddupfg.public.blob.vercel-storage.com', // Added Vercel Blob Storage
-      'your-image-domain.com',
-    ],
+    domains: ['files.edgestore.dev', 'public.blob.vercel-storage.com'],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
   },
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
+  experimental: {
+    serverActions: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
   },
 }
 
-module.exports = nextConfig;
+module.exports = nextConfig
