@@ -10,6 +10,7 @@ import {
   UserPlus,
   Mail,
   Settings,
+  CreditCard,
 } from "lucide-react";
 
 const routes = [
@@ -36,6 +37,12 @@ const routes = [
     icon: UserPlus,
     href: "/admin/admissions",
     color: "text-orange-500",
+  },
+  {
+    label: "Payments",
+    icon: CreditCard,
+    href: "/admin/payments",
+    color: "text-green-500",
   },
   {
     label: "Messages",

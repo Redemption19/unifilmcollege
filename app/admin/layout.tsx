@@ -1,23 +1,22 @@
 import Sidebar from "@/components/admin/Sidebar";
-import Header from "@/components/admin/Header";
+import { AdminHeader } from "./components/AdminHeader";
+import { Toaster } from "sonner";
 
-export default function DashboardLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex h-screen">
-      {/* Sidebar */}
-      <Sidebar />
-      
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4">
-          {children}
-        </main>
+    <div className="h-full relative">
+      <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
+        <Sidebar />
       </div>
+      <div className="md:pl-72">
+        <AdminHeader />
+        <main>{children}</main>
+      </div>
+      <Toaster position="top-center" />
     </div>
   );
 } 

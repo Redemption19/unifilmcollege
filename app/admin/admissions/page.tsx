@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -10,85 +9,108 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye, Download } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/utils";
 
-interface Admission {
+interface Payment {
   _id: string;
   fullName: string;
   email: string;
-  course: string;
-  status: "pending" | "approved" | "rejected";
+  phone: string;
+  amount: number;
+  status: 'pending' | 'successful' | 'failed';
+  reference: string;
+  formSent: boolean;
   createdAt: string;
 }
 
-export default function AdmissionsPage() {
-  const [admissions, setAdmissions] = useState<Admission[]>([]);
+export default function AdminAdmissionsPage() {
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchAdmissions();
+    const fetchPayments = async () => {
+      try {
+        const response = await fetch('/api/admin/payments');
+        if (response.ok) {
+          const data = await response.json();
+          setPayments(data);
+        }
+      } catch (error) {
+        console.error('Error fetching payments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPayments();
   }, []);
 
-  const fetchAdmissions = async () => {
-    try {
-      const res = await fetch('/api/admin/admissions');
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setAdmissions(data);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'successful':
+        return 'bg-green-500';
+      case 'pending':
+        return 'bg-yellow-500';
+      case 'failed':
+        return 'bg-red-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  }
+
   return (
-    <div className="h-full p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Admissions</h2>
-        <Button variant="outline">
-          <Download className="h-4 w-4 mr-2" />
-          Export
-        </Button>
-      </div>
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Course</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {admissions.map((admission) => (
-              <TableRow key={admission._id}>
-                <TableCell className="font-medium">{admission.fullName}</TableCell>
-                <TableCell>{admission.email}</TableCell>
-                <TableCell>{admission.course}</TableCell>
-                <TableCell>
-                  <div className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                    ${admission.status === 'approved' ? 'bg-green-100 text-green-800' : 
-                      admission.status === 'rejected' ? 'bg-red-100 text-red-800' : 
-                      'bg-yellow-100 text-yellow-800'}`}>
-                    {admission.status}
-                  </div>
-                </TableCell>
-                <TableCell>{new Date(admission.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="icon">
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                </TableCell>
+    <div className="p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Admission Form Purchases</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Reference</TableHead>
+                <TableHead>Form Sent</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {payments.map((payment) => (
+                <TableRow key={payment._id}>
+                  <TableCell>{formatDate(payment.createdAt)}</TableCell>
+                  <TableCell>{payment.fullName}</TableCell>
+                  <TableCell>{payment.email}</TableCell>
+                  <TableCell>{payment.phone}</TableCell>
+                  <TableCell>GHS {payment.amount / 100}</TableCell>
+                  <TableCell>
+                    <Badge className={getStatusColor(payment.status)}>
+                      {payment.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="font-mono text-sm">{payment.reference}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={payment.formSent ? "success" : "secondary"}>
+                      {payment.formSent ? "Sent" : "Pending"}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 } 

@@ -28,11 +28,10 @@ export default async function AdminPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <AdminHeader />
       <main className="p-4 sm:p-6 space-y-4">
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
+            <h2 className="text-2xl font-bold tracking-tight">Admin Dashboard</h2>
             <p className="text-muted-foreground">
               Manage and monitor all form purchases
             </p>
