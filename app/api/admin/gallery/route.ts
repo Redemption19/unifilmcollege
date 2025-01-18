@@ -4,6 +4,10 @@ import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 import sharp from "sharp";
 
+// Set runtime to Node.js or Edge
+export const runtime = "nodejs"; // Change to "edge" if needed
+
+// GET: Fetch all gallery images
 export async function GET() {
   try {
     await connectDB();
@@ -11,10 +15,14 @@ export async function GET() {
     return NextResponse.json(images);
   } catch (error) {
     console.error("[GALLERY_GET]", error);
-    return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch images" },
+      { status: 500 }
+    );
   }
 }
 
+// POST: Upload a new gallery image
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -34,25 +42,27 @@ export async function POST(req: Request) {
     // Optimize image before upload
     const buffer = Buffer.from(await file.arrayBuffer());
     const optimizedBuffer = await sharp(buffer)
-      .resize(1200, 900, { // Set maximum dimensions
-        fit: 'inside',
-        withoutEnlargement: true
+      .resize({
+        width: 1200,
+        height: 900,
+        fit: "inside",
+        withoutEnlargement: true,
       })
       .jpeg({ quality: 80 }) // Compress JPEG
       .toBuffer();
 
     // Upload optimized image
     const blob = await put(file.name, optimizedBuffer, {
-      access: 'public',
+      access: "public",
       addRandomSuffix: true,
-      contentType: 'image/jpeg'
+      contentType: "image/jpeg",
     });
 
     // Create database entry
     const image = await GalleryImage.create({
       src: blob.url,
       alt,
-      category
+      category,
     });
 
     return NextResponse.json(image);
@@ -65,6 +75,7 @@ export async function POST(req: Request) {
   }
 }
 
+// DELETE: Delete an image by ID
 export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
@@ -87,12 +98,3 @@ export async function DELETE(
     );
   }
 }
-
-// Increase payload size limit
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-}; 
