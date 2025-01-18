@@ -3,9 +3,8 @@ import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 
-// Correct route segment config for Next.js 14
+// Remove all config exports and use metadata
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 export async function GET() {
   try {

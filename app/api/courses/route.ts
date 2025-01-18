@@ -2,14 +2,12 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Course from "@/models/course";
 
-export const revalidate = 3600; // Revalidate every hour
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
     await connectDB();
     const courses = await Course.find().sort({ createdAt: -1 });
-    
-    console.log('Fetched courses:', courses.length);
     
     return NextResponse.json(courses, {
       headers: {

@@ -3,6 +3,8 @@ import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 
+export const dynamic = 'force-dynamic';
+
 interface UpdateData {
   alt: string;
   category: string;
