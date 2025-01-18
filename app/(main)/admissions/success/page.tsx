@@ -1,7 +1,7 @@
 // Add "use client" at the top of the file
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,18 @@ import Link from 'next/link';
 import { CheckCircle2, Download } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 
+// Your main functional component
 export default function SuccessPage() {
+  return (
+    // Wrap the logic inside Suspense to handle CSR properly
+    <Suspense fallback={<div>Loading...</div>}>
+      <SuccessPageContent />
+    </Suspense>
+  );
+}
+
+// The actual component that contains the business logic
+function SuccessPageContent() {
   const searchParams = useSearchParams();
   const reference = searchParams.get('reference');
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
