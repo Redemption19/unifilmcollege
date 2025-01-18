@@ -10,7 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, PlusCircle, Trash2, Pencil } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { Course } from "@/types";
 import CourseModal from "@/components/admin/CourseModal";
@@ -148,10 +149,15 @@ export default function CoursesPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Courses</h1>
-        <CourseModal onSubmit={handleAddCourse} />
+    <div className="container py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Courses</h1>
+        <Button asChild>
+          <Link href="/admin/courses/add">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Add Course
+          </Link>
+        </Button>
       </div>
 
       <div className="border rounded-lg">
@@ -160,7 +166,6 @@ export default function CoursesPage() {
             <TableRow>
               <TableHead>Course</TableHead>
               <TableHead>Duration</TableHead>
-              <TableHead>Fees</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -181,7 +186,6 @@ export default function CoursesPage() {
                   </div>
                 </TableCell>
                 <TableCell>{course.duration}</TableCell>
-                <TableCell>{course.fees}</TableCell>
                 <TableCell className="text-right space-x-2">
                   <EditCourseModal course={course} onSubmit={handleEdit} />
                   <Button

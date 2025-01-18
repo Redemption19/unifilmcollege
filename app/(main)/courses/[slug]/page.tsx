@@ -71,14 +71,10 @@ export default function CoursePage({ params }: { params: { slug: string } }) {
                 <CardTitle>Program Details</CardTitle>
               </CardHeader>
               <CardContent>
-                <dl className="grid grid-cols-2 gap-4">
+                <dl className="grid grid-cols-1 gap-4">
                   <div>
                     <dt className="font-medium text-muted-foreground">Duration</dt>
                     <dd className="mt-1 text-xl">{course.duration}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-medium text-muted-foreground">Fees</dt>
-                    <dd className="mt-1 text-xl">{course.fees}</dd>
                   </div>
                 </dl>
               </CardContent>

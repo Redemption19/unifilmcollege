@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,42 @@ interface EditCourseModalProps {
 export default function EditCourseModal({ course, onSubmit }: EditCourseModalProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [moduleInputs, setModuleInputs] = useState<string[]>(
+    course.modules || []
+  );
+  const [outcomeInputs, setOutcomeInputs] = useState<string[]>(
+    course.learningOutcomes || []
+  );
+
+  const addModuleInput = () => {
+    setModuleInputs([...moduleInputs, '']);
+  };
+
+  const removeModuleInput = (index: number) => {
+    const newModules = moduleInputs.filter((_, i) => i !== index);
+    setModuleInputs(newModules);
+  };
+
+  const updateModuleInput = (index: number, value: string) => {
+    const newModules = [...moduleInputs];
+    newModules[index] = value;
+    setModuleInputs(newModules);
+  };
+
+  const addOutcomeInput = () => {
+    setOutcomeInputs([...outcomeInputs, '']);
+  };
+
+  const removeOutcomeInput = (index: number) => {
+    const newOutcomes = outcomeInputs.filter((_, i) => i !== index);
+    setOutcomeInputs(newOutcomes);
+  };
+
+  const updateOutcomeInput = (index: number, value: string) => {
+    const newOutcomes = [...outcomeInputs];
+    newOutcomes[index] = value;
+    setOutcomeInputs(newOutcomes);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,29 +68,22 @@ export default function EditCourseModal({ course, onSubmit }: EditCourseModalPro
 
     try {
       const formData = new FormData(e.currentTarget);
-      
-      // Process modules
-      const modulesText = formData.get('modules') as string;
-      const modules = modulesText.split('\n').filter(module => module.trim() !== '');
+      // Add modules and learning outcomes as arrays
       formData.delete('modules');
-      modules.forEach(module => formData.append('modules', module));
-
-      // Process learning outcomes
-      const outcomesText = formData.get('learningOutcomes') as string;
-      const outcomes = outcomesText.split('\n').filter(outcome => outcome.trim() !== '');
       formData.delete('learningOutcomes');
-      outcomes.forEach(outcome => formData.append('learningOutcomes', outcome));
-
-      // Log the formData for debugging without using entries()
-      console.log('FormData contents:');
-      const formDataObj = Object.fromEntries(Array.from(formData));
-      console.log(formDataObj);
+      moduleInputs.forEach((module) => {
+        if (module.trim()) formData.append('modules', module);
+      });
+      outcomeInputs.forEach((outcome) => {
+        if (outcome.trim()) formData.append('learningOutcomes', outcome);
+      });
 
       await onSubmit(course._id, formData);
       setOpen(false);
+      toast.success('Course updated successfully');
     } catch (error) {
-      console.error("Error updating course:", error);
-      toast.error("Failed to update course: " + (error as Error).message);
+      console.error(error);
+      toast.error('Failed to update course');
     } finally {
       setLoading(false);
     }
@@ -66,17 +96,9 @@ export default function EditCourseModal({ course, onSubmit }: EditCourseModalPro
           <Pencil className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl h-[90vh] overflow-y-auto p-6">
-        <DialogHeader className="flex flex-row items-center justify-between sticky top-0 bg-background z-50 pb-4">
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
           <DialogTitle>Edit Course</DialogTitle>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setOpen(false)}
-            className="h-6 w-6 rounded-full"
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information Section */}
@@ -102,6 +124,15 @@ export default function EditCourseModal({ course, onSubmit }: EditCourseModalPro
                 />
               </div>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                name="description"
+                defaultValue={course.description}
+                required
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="duration">Duration</Label>
@@ -124,73 +155,94 @@ export default function EditCourseModal({ course, onSubmit }: EditCourseModalPro
             </div>
           </div>
 
-          {/* Description Section */}
+          {/* Modules Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Course Description</h3>
+            <h3 className="text-lg font-medium">Modules</h3>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                name="description"
-                defaultValue={course.description}
-                required
-                className="min-h-[100px]"
-              />
+              {moduleInputs.map((module, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={module}
+                    onChange={(e) => updateModuleInput(index, e.target.value)}
+                    name={`modules`}
+                    placeholder="Enter module name"
+                  />
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => removeModuleInput(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                  {index === moduleInputs.length - 1 && (
+                    <Button type="button" onClick={addModuleInput} variant="outline">
+                      +
+                    </Button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Course Details Section */}
+          {/* Learning Outcomes Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Course Details</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="modules">Modules (one per line)</Label>
-                <Textarea
-                  id="modules"
-                  name="modules"
-                  defaultValue={course.modules?.join('\n')}
-                  rows={5}
-                  className="min-h-[150px]"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="learningOutcomes">Learning Outcomes (one per line)</Label>
-                <Textarea
-                  id="learningOutcomes"
-                  name="learningOutcomes"
-                  defaultValue={course.learningOutcomes?.join('\n')}
-                  rows={5}
-                  className="min-h-[150px]"
-                />
-              </div>
+            <h3 className="text-lg font-medium">Learning Outcomes</h3>
+            <div className="space-y-2">
+              {outcomeInputs.map((outcome, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={outcome}
+                    onChange={(e) => updateOutcomeInput(index, e.target.value)}
+                    name={`learningOutcomes`}
+                    placeholder="Enter learning outcome"
+                  />
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => removeOutcomeInput(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                  {index === outcomeInputs.length - 1 && (
+                    <Button type="button" onClick={addOutcomeInput} variant="outline">
+                      +
+                    </Button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Career Path Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Career Information</h3>
-            <div className="space-y-2">
-              <Label htmlFor="careerPath">Career Path</Label>
-              <Textarea
-                id="careerPath"
-                name="careerPath"
-                defaultValue={course.careerPath}
-                rows={3}
-                className="min-h-[100px]"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="careerPath">Career Path</Label>
+            <Textarea
+              id="careerPath"
+              name="careerPath"
+              defaultValue={course.careerPath}
+              required
+              placeholder="Describe potential career paths"
+            />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                Saving Changes...
-              </>
-            ) : (
-              "Save Changes"
-            )}
-          </Button>
+          <DialogFooter>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full sm:w-auto"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving Changes...
+                </>
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

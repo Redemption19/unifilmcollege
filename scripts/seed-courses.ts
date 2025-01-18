@@ -1,6 +1,6 @@
 import { courseData } from '@/lib/course-data';
 import connectDB from '@/lib/mongodb';
-import Course from '@/models/Course';
+import Course from '@/models/course';
 import slugify from 'slugify';
 
 async function seedCourses() {

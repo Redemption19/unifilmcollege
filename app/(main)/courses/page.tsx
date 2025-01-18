@@ -1,39 +1,50 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { Suspense, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { Loader2 } from "lucide-react";
+import type { Course } from "@/types";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { Course } from "@/types";
-import { Loader2 } from "lucide-react";
+
+// Lazy load CourseGrid
+const CourseGrid = dynamic(() => import('@/components/CourseGrid'), {
+  loading: () => (
+    <div className="flex h-[60vh] items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  )
+});
 
 export default function CoursesPage() {
-  const [courses, setcourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Initialize AOS
     AOS.init({
-      duration: 1000,
-      easing: "ease",
+      duration: 800,
       once: true,
     });
+
+    // Fetch courses
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('/api/courses');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCourses();
   }, []);
-
-  const fetchCourses = async () => {
-    try {
-      const res = await fetch('/api/courses');
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setcourses(data);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -58,52 +69,15 @@ export default function CoursesPage() {
       </div>
 
       {/* Courses Grid */}
-      <div className="py-24 sm:py-32" data-aos="fade-up" data-aos-delay="200">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            {courses.map((course) => (
-              <div
-                key={course._id}
-                className="bg-card rounded-2xl overflow-hidden shadow-lg flex flex-col"
-              >
-                <div className="relative h-[240px] w-full">
-                  <Image
-                    src={course.image}
-                    alt={course.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                
-                <div className="p-8 flex-1">
-                  <h2 className="text-2xl font-bold mb-4">{course.title}</h2>
-                  <dl className="grid gap-4 mb-6">
-                    <div>
-                      <dt className="font-medium text-muted-foreground">Duration</dt>
-                      <dd className="mt-1">{course.duration}</dd>
-                    </div>
-                    <div>
-                      <dt className="font-medium text-muted-foreground">Fees</dt>
-                      <dd className="mt-1">{course.fees}</dd>
-                    </div>
-                  </dl>
-                  <p className="text-muted-foreground mb-8">
-                    {course.description}
-                  </p>
-                  <div className="flex gap-4">
-                    <Button asChild>
-                      <Link href={`/courses/${course.slug}`}>Read More</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href="/admissions">Apply Now</Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
+      <Suspense 
+        fallback={
+          <div className="flex h-[60vh] items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
-        </div>
-      </div>
+        }
+      >
+        <CourseGrid courses={courses} />
+      </Suspense>
     </div>
   );
 }

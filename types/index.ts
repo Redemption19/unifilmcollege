@@ -3,12 +3,11 @@ export interface Course {
   title: string;
   description: string;
   duration: string;
-  fees: string;
   image: string;
-  slug?: string;
-  modules?: string[];
-  learningOutcomes?: string[];
-  careerPath?: string;
+  slug: string;
+  modules: string[];
+  learningOutcomes: string[];
+  careerPath: string;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -3,7 +3,6 @@ type Course = {
   slug: string;
   image: string;
   duration: string;
-  fees: string;
   description: string;
   modules: string[];
   learningOutcomes: string[];
@@ -16,7 +15,6 @@ export const courseData: Course[] = [
     slug: "journalism-media-studies",
     image: "/images/film2.jpg",
     duration: "1 year",
-    fees: "3500 GHS",
     description: "Master the art of storytelling and news reporting across multiple media platforms with our comprehensive journalism program.",
     modules: [
       "Newspaper Reporting / Print Journalism",
@@ -39,7 +37,6 @@ export const courseData: Course[] = [
     slug: "tv-film-production",
     image: "/images/joun.jpg",
     duration: "1 year (Diploma) / 6 months (Certificate)",
-    fees: "4000 GHS (Diploma) / 2500 GHS (Certificate)",
     description: "Learn the art of visual storytelling through hands-on experience in film directing, editing, and production.",
     modules: [
       "Music Video Directing & Editing",
@@ -61,7 +58,6 @@ export const courseData: Course[] = [
     slug: "graphic-design",
     image: "/images/graphic.jpg",
     duration: "1 year (Diploma) / 6 months (Certificate)",
-    fees: "4000 GHS (Diploma) / 2500 GHS (Certificate)",
     description: "Master the tools and techniques of modern graphic design, from branding to digital media.",
     modules: [
       "CorelDraw Application",
@@ -81,7 +77,6 @@ export const courseData: Course[] = [
     slug: "photography",
     image: "/images/photography.jpg",
     duration: "1 year (Diploma) / 6 months (Certificate)",
-    fees: "4000 GHS (Diploma) / 2500 GHS (Certificate)",
     description: "Learn professional photography techniques and master the art of visual storytelling.",
     modules: [
       "Documentary and Commercial Photography",
@@ -100,7 +95,6 @@ export const courseData: Course[] = [
     slug: "sound-engineering",
     image: "/images/sound.jpg",
     duration: "1 year (Diploma) / 6 months (Certificate)",
-    fees: "4000 GHS (Diploma) / 2500 GHS (Certificate)",
     description: "Master the art of sound production, mixing, and audio engineering.",
     modules: [
       "Beats Making",
@@ -119,7 +113,6 @@ export const courseData: Course[] = [
     slug: "microsoft-office",
     image: "/images/office.webp",
     duration: "6 months",
-    fees: "2500 GHS",
     description: "Master essential Microsoft Office applications for professional workplace success.",
     modules: [
       "Microsoft PowerPoint, Word, Excel, Access",
@@ -137,7 +130,6 @@ export const courseData: Course[] = [
     slug: "cosmetology",
     image: "/images/cos.jpg",
     duration: "4 months",
-    fees: "2500 GHS",
     description: "Learn professional beauty techniques in hair styling and makeup artistry.",
     modules: [
       "Hair: Wig Making, Braids, Ponytails, Bridal Styling",

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import Course from "@/models/Course";
+import Course from "@/models/course";
 import { put } from "@vercel/blob";
 import slugify from "slugify";
+import sharp from 'sharp';
 
 export async function GET() {
   try {
@@ -36,9 +37,18 @@ export async function POST(req: Request) {
     const learningOutcomes = formData.getAll("learningOutcomes").map(o => o.toString()).filter(o => o.trim() !== '');
 
     // Upload image
-    const blob = await put(image.name, image, {
+    const optimizedBuffer = await sharp(await image.arrayBuffer())
+      .resize(1200, 800, { 
+        fit: 'inside',
+        withoutEnlargement: true 
+      })
+      .jpeg({ quality: 80 })
+      .toBuffer();
+
+    const blob = await put(image.name, optimizedBuffer, {
       access: 'public',
-      addRandomSuffix: true
+      addRandomSuffix: true,
+      contentType: 'image/jpeg'
     });
 
     const course = await Course.create({

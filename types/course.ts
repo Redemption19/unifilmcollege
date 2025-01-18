@@ -1,3 +1,4 @@
+
 export interface Course {
   id: string;
   slug: string;
@@ -9,6 +10,5 @@ export interface Course {
   overview: string;
   learningOutcomes: string[];
   careerPath: string;
-  fees: string;
   modules: string[];
 } 

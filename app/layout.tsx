@@ -9,8 +9,36 @@ const font = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Unifilm College",
-  description: "Unifilm College is a school in Ghana that offers courses in film production, acting, and more.",
+  metadataBase: new URL('https://your-domain.com'),
+  title: {
+    default: 'Unifilm College',
+    template: '%s | Unifilm College'
+  },
+  description: "Ghana's Premier Film & Creative Arts Institution",
+  keywords: ['film school', 'media studies', 'ghana', 'creative arts', 'journalism'],
+  authors: [{ name: 'Unifilm College' }],
+  creator: 'Unifilm College',
+  publisher: 'Unifilm College',
+  robots: {
+    index: true,
+    follow: true
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_GH',
+    url: 'https://unifilmcollege.com',
+    siteName: 'Unifilm College',
+    images: [{
+      url: '/images/og-image.jpg',
+      width: 1200,
+      height: 630,
+      alt: 'Unifilm College'
+    }]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/images/og-image.jpg']
+  }
 };
 
 export default function RootLayout({

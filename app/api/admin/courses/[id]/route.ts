@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import Course from "@/models/Course";
+import Course from "@/models/course";
 import { put } from "@vercel/blob";
 import slugify from "slugify";
 

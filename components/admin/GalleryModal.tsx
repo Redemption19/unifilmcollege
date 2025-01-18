@@ -6,10 +6,12 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogFooter,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Loader2, PlusCircle } from "lucide-react";
 
 export default function GalleryModal({ onSubmit }: { onSubmit: (data: FormData) => Promise<void> }) {
@@ -40,25 +42,49 @@ export default function GalleryModal({ onSubmit }: { onSubmit: (data: FormData) 
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add New Image</DialogTitle>
-        </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Image</label>
-            <Input name="file" type="file" accept="image/*" required />
+          <DialogHeader>
+            <DialogTitle>Add New Image</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="file">Image</Label>
+            <Input 
+              id="file" 
+              name="file" 
+              type="file" 
+              accept="image/*" 
+              required 
+            />
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Category</label>
-            <Input name="category" required />
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="category">Category</Label>
+            <Input
+              id="category"
+              name="category"
+              required
+            />
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Description</label>
-            <Input name="alt" required />
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="alt">Description</Label>
+            <Input
+              id="alt"
+              name="alt"
+              required
+            />
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add Image"}
-          </Button>
+          <DialogFooter>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Adding Image...
+                </>
+              ) : (
+                "Add Image"
+              )}
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
