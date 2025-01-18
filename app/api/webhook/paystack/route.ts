@@ -90,8 +90,5 @@ export async function POST(request: Request) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}; 
+// Updated API Route Segment Config
+export const dynamic = 'force-dynamic'; // Ensures the route is dynamic
