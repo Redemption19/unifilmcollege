@@ -4,10 +4,9 @@ import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
 import sharp from "sharp";
 
-// Set runtime to Node.js or Edge
-export const runtime = "nodejs"; // Change to "edge" if needed
+// Increase payload size limit within the route handler itself
+export const runtime = "nodejs"; // Ensure this runs in a Node.js environment
 
-// GET: Fetch all gallery images
 export async function GET() {
   try {
     await connectDB();
@@ -22,7 +21,6 @@ export async function GET() {
   }
 }
 
-// POST: Upload a new gallery image
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -42,9 +40,7 @@ export async function POST(req: Request) {
     // Optimize image before upload
     const buffer = Buffer.from(await file.arrayBuffer());
     const optimizedBuffer = await sharp(buffer)
-      .resize({
-        width: 1200,
-        height: 900,
+      .resize(1200, 900, {
         fit: "inside",
         withoutEnlargement: true,
       })
@@ -75,20 +71,25 @@ export async function POST(req: Request) {
   }
 }
 
-// DELETE: Delete an image by ID
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: Request) {
   try {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "Image ID is required" }, { status: 400 });
+    }
+
     await connectDB();
-    const image = await GalleryImage.findByIdAndDelete(params.id);
+    const image = await GalleryImage.findByIdAndDelete(id);
+
     if (!image) {
       return NextResponse.json(
         { error: "Image not found" },
         { status: 404 }
       );
     }
+
     return NextResponse.json({ message: "Image deleted successfully" });
   } catch (error) {
     console.error("[GALLERY_DELETE]", error);
