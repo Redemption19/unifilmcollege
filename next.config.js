@@ -6,6 +6,7 @@ const nextConfig = {
       'plus.unsplash.com',
       'res.cloudinary.com',
       'qhaxwz0jp8ddupfg.public.blob.vercel-storage.com', // Added Vercel Blob Storage
+      'your-image-domain.com',
     ],
   },
   env: {

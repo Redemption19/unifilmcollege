@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import GalleryImage from "@/models/GalleryImage";
 import { put } from "@vercel/blob";
-import sharp from "sharp";
+
+// New way to configure the API route
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
@@ -10,15 +13,16 @@ export async function GET() {
     const images = await GalleryImage.find().sort({ createdAt: -1 });
     return NextResponse.json(images);
   } catch (error) {
-    console.error("[GALLERY_GET]", error);
-    return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 });
+    console.error('Error fetching gallery images:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch gallery images' },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
-
     const formData = await req.formData();
     const file = formData.get("file") as File;
     const alt = formData.get("alt") as string;
@@ -26,29 +30,18 @@ export async function POST(req: Request) {
 
     if (!file || !alt || !category) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "File, title and category are required" },
         { status: 400 }
       );
     }
 
-    // Optimize image before upload
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const optimizedBuffer = await sharp(buffer)
-      .resize(1200, 900, { // Set maximum dimensions
-        fit: 'inside',
-        withoutEnlargement: true
-      })
-      .jpeg({ quality: 80 }) // Compress JPEG
-      .toBuffer();
+    await connectDB();
 
-    // Upload optimized image
-    const blob = await put(file.name, optimizedBuffer, {
+    const blob = await put(file.name, file, {
       access: 'public',
-      addRandomSuffix: true,
-      contentType: 'image/jpeg'
+      addRandomSuffix: true
     });
 
-    // Create database entry
     const image = await GalleryImage.create({
       src: blob.url,
       alt,
@@ -57,42 +50,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json(image);
   } catch (error) {
-    console.error("[GALLERY_POST]", error);
+    console.error('Error saving gallery image:', error);
     return NextResponse.json(
-      { error: "Failed to upload image" },
+      { error: 'Failed to save gallery image' },
       { status: 500 }
     );
   }
-}
-
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    await connectDB();
-    const image = await GalleryImage.findByIdAndDelete(params.id);
-    if (!image) {
-      return NextResponse.json(
-        { error: "Image not found" },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json({ message: "Image deleted successfully" });
-  } catch (error) {
-    console.error("[GALLERY_DELETE]", error);
-    return NextResponse.json(
-      { error: "Failed to delete image" },
-      { status: 500 }
-    );
-  }
-}
-
-// Increase payload size limit
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-}; 
+} 
