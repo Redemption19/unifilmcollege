@@ -14,13 +14,14 @@ const paymentSchema = new mongoose.Schema({
   formSent: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
+}, {
+  timestamps: true
 });
 
-// Add indexes for better query performance
-paymentSchema.index({ reference: 1 });
+// Only define indexes once
 paymentSchema.index({ status: 1 });
 paymentSchema.index({ createdAt: -1 });
 
 const Payment = mongoose.models.Payment || mongoose.model("Payment", paymentSchema);
 
-export default Payment; 
+export default Payment;

@@ -4,22 +4,42 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 async function getPayments() {
+  console.log(
+    "Environment variable NEXT_PUBLIC_API_URL:",
+    process.env.NEXT_PUBLIC_API_URL
+  );
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  console.log("Constructed BASE_URL:", BASE_URL);
+
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/admissions/payment`, {
+    const res = await fetch(`${BASE_URL}/api/admissions/payment`, {
       next: { revalidate: 0 },
     });
-    if (!res.ok) throw new Error("Failed to fetch payments");
+
+    if (!res.ok) {
+      console.error("Failed to fetch payments:", res.statusText);
+      throw new Error("Failed to fetch payments");
+    }
+
     return res.json();
-  } catch (error) {
-    console.error("Error fetching payments:", error);
-    return [];
+  } catch (error: any) {
+    console.error("Error fetching payments:", error.message);
+    return []; // Return an empty array to avoid breaking the UI
   }
 }
 
 function PaymentStats({ payments }: { payments: any[] }) {
+  if (payments.length === 0) {
+    return <div>No payment data available at this time.</div>;
+  }
+
   const totalRevenue = payments.reduce((acc, p) => acc + p.amount, 0) / 100;
-  const successfulPayments = payments.filter(p => p.status === "successful").length;
-  const successRate = payments.length ? (successfulPayments / payments.length) * 100 : 0;
+  const successfulPayments = payments.filter(
+    (p) => p.status === "successful"
+  ).length;
+  const successRate = payments.length
+    ? (successfulPayments / payments.length) * 100
+    : 0;
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -86,11 +106,18 @@ export default async function PaymentsPage() {
           View and manage all admission form payments
         </p>
       </div>
-      
-      <Suspense fallback={<PaymentsLoading />}>
-        <PaymentStats payments={payments} />
-        <PaymentsTable payments={payments} />
-      </Suspense>
+
+      {payments.length === 0 ? (
+        <div>
+          <h2 className="text-xl">No payments found</h2>
+          <p>Please check back later.</p>
+        </div>
+      ) : (
+        <Suspense fallback={<PaymentsLoading />}>
+          <PaymentStats payments={payments} />
+          <PaymentsTable payments={payments} />
+        </Suspense>
+      )}
     </div>
   );
-} 
+}

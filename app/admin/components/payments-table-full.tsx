@@ -1,5 +1,6 @@
-"use client";
-import { useState } from 'react';
+"use client"; // This ensures the component is treated as a client-side component
+
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -123,4 +124,4 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
       </Table>
     </div>
   );
-} 
+}
