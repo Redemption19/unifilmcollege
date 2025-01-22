@@ -6,16 +6,10 @@ const nextConfig = {
       'public.blob.vercel-storage.com',
       'qhaxwz0jp8ddupfg.public.blob.vercel-storage.com'
     ],
-    formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'public.blob.vercel-storage.com',
       }
     ]
   },
@@ -25,6 +19,15 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true
   },
+  experimental: {
+    serverActions: true,
+  },
+  output: 'standalone',
+  unstable_runtimeJS: true,
+  webpack: (config) => {
+    config.externals = [...(config.externals || []), 'sharp'];
+    return config;
+  }
 };
 
 module.exports = nextConfig;
