@@ -5,16 +5,18 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -22,24 +24,51 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      // Validate form inputs
+      if (!formData.name.trim()) {
+        toast.error("Name is required");
+        return;
+      }
+
+      if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
+        toast.error("Invalid email address");
+        return;
+      }
+
+      if (formData.password.length < 6) {
+        toast.error("Password must be at least 6 characters long");
+        return;
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+
+      // Make API request to signup endpoint
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Login failed");
+        throw new Error(data.error || "Failed to create account");
       }
 
-      toast.success("Login successful");
-
-      // Redirect user to the dashboard
-      router.push("/admin/dashboard");
+      toast.success("Admin account created successfully");
+      router.push("/admin/login");
     } catch (error: any) {
-      toast.error(error.message);
+      console.error("Signup error:", error);
+      toast.error(error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -49,10 +78,23 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-lg">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl">Admin Login</CardTitle>
+          <CardTitle className="text-2xl">Create Admin Account</CardTitle>
+          <CardDescription>
+            Enter your details to create a new admin account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                name="name"
+                placeholder="Full Name"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+
             <div className="space-y-2">
               <Input
                 name="email"
@@ -68,7 +110,7 @@ export default function LoginPage() {
               <Input
                 name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Password (min. 6 characters)"
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -82,25 +124,38 @@ export default function LoginPage() {
               </button>
             </div>
 
+            <div className="space-y-2">
+              <Input
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                required
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmPassword: e.target.value })
+                }
+              />
+            </div>
+
             <Button className="w-full" type="submit" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
+                  Creating Account...
                 </>
               ) : (
-                "Sign in"
+                "Create Account"
               )}
             </Button>
 
             <div className="text-center text-sm">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Button
                 variant="link"
                 className="pl-1 font-semibold"
-                onClick={() => router.push("/admin/signup")}
+                onClick={() => router.push("/admin/login")}
               >
-                Sign up
+                Sign in
               </Button>
             </div>
           </form>

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -7,9 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { usePaystackPayment } from "react-paystack";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-interface PaymentModalProps {
+export interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -26,23 +25,23 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     reference: new Date().getTime().toString(),
     email,
     amount: 10000, // Amount in pesewas (100 GHS = 10000 pesewas)
-    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "",
     currency: "GHS", // Specify Ghana Cedis as currency
-    channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+    channels: ["card", "bank", "ussd", "qr", "mobile_money", "bank_transfer"],
     metadata: {
       custom_fields: [
         {
           display_name: "Full Name",
           variable_name: "full_name",
-          value: fullName
+          value: fullName,
         },
         {
           display_name: "Phone Number",
           variable_name: "phone",
-          value: phone
-        }
-      ]
-    }
+          value: phone,
+        },
+      ],
+    },
   };
 
   const initializePayment = usePaystackPayment(config);
@@ -50,10 +49,10 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
   const handleSuccess = async (reference: any) => {
     try {
       // 1. Save payment details to your database
-      const response = await fetch('/api/admissions/payment', {
-        method: 'POST',
+      const response = await fetch("/api/admissions/payment", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           reference: reference.reference,
@@ -61,11 +60,11 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
           fullName,
           phone,
           amount: 10000,
-          status: 'successful'
+          status: "successful",
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to save payment');
+      if (!response.ok) throw new Error("Failed to save payment");
 
       // 2. Show success message
       toast({
@@ -77,7 +76,7 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
       setEmail("");
       setFullName("");
       setPhone("");
-      
+
       // 4. Close modal
       onClose();
 
@@ -118,14 +117,13 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
       onClose();
 
       // Small delay to ensure modal is closed
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Initialize Paystack payment
       initializePayment({
         onSuccess: handleSuccess,
         onClose: handleClose,
       });
-
     } catch (error) {
       toast({
         title: "Error",
@@ -186,31 +184,27 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
             <div className="space-y-2">
               <Label>Amount</Label>
-              <div className="p-3 bg-muted rounded-md">
-                <p className="font-medium">GHS 100.00</p>
-              </div>
+              <div className="font-semibold">100 GHS</div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex justify-center pt-4">
               <Button
-                type="button"
-                variant="outline"
-                className="w-full sm:w-auto order-1 sm:order-none"
-                onClick={onClose}
-              >
-                Cancel
-              </Button>
-              <Button 
-                type="submit" 
-                className="w-full sm:w-auto"
+                type="submit"
+                size="lg"
                 disabled={loading}
+                className="w-full flex justify-center items-center"
               >
-                {loading ? "Processing..." : "Proceed to Payment"}
+                {loading ? (
+                  <div className="spinner"></div> // Add a simple spinner or a loading component
+                ) : (
+                  "Proceed to Pay"
+                )}
               </Button>
+
             </div>
           </form>
         </div>
       </DialogContent>
     </Dialog>
   );
-} 
+}

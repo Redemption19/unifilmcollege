@@ -13,7 +13,8 @@ const paymentMethods = [
       "Account Name: Unifilm College",
       "Account Number: 1461440000205",
     ],
-    instructions: "Make payments at any GCB branch. Send receipt copy to school email to receive admission form.",
+    instructions:
+      "Make payments at any GCB branch. Send receipt copy to school email to receive admission form.",
   },
   {
     icon: Smartphone,
@@ -23,7 +24,8 @@ const paymentMethods = [
       "Select option 2 (MomoPay)",
       "Merchant ID: 645801",
     ],
-    instructions: "Enter amount and confirm with PIN. Send screenshot to school email to receive admission form.",
+    instructions:
+      "Enter amount and confirm with PIN. Send screenshot to school email to receive admission form.",
   },
   {
     icon: CreditCard,
